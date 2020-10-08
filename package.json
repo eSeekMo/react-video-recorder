@@ -23,7 +23,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && yarn test",
+      "pre-commit": "lint-staged && yarn test:unit",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
@@ -46,6 +46,7 @@
     "styled-components": "^4.1.1"
   },
   "dependencies": {
+    "file-saver": "^2.0.2",
     "react-svg-inline": "^2.1.0",
     "ts-ebml": "^2.0.2"
   },

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import { Decoder, tools, Reader } from 'ts-ebml'
+import { saveAs } from 'file-saver'
 
 import UnsupportedView from './defaults/unsupported-view'
 import ErrorView from './defaults/error-view'
@@ -87,6 +88,8 @@ export default class VideoRecorder extends Component {
     timeLimit: PropTypes.number,
     /** Use this if you want to show play/pause/etc. controls on the replay video */
     showReplayControls: PropTypes.bool,
+    /** Use this if you want to show download video button the replay video */
+    showDownloadButton: PropTypes.bool,
     /** Use this to turn off autoplay and looping of the replay video. It is recommended to also showReplayControls in order to play */
     replayVideoAutoplayAndLoopOff: PropTypes.bool,
     /** Use this if you want to customize the constraints passed to getUserMedia() */
@@ -104,6 +107,8 @@ export default class VideoRecorder extends Component {
     renderUnsupportedView: PropTypes.func,
     renderErrorView: PropTypes.func,
     renderActions: PropTypes.func,
+
+    getDownloadFilename: PropTypes.func,
 
     onCameraOn: PropTypes.func,
     onTurnOnCamera: PropTypes.func,
@@ -597,9 +602,9 @@ export default class VideoRecorder extends Component {
     this.videoInput.current.click()
   }
 
-  handleStopReplaying = () => {
+  handleStopReplaying = (onStopReplayingParam) => {
     if (this.props.onStopReplaying) {
-      this.props.onStopReplaying()
+      this.props.onStopReplaying(onStopReplayingParam)
     }
 
     if (this.props.useVideoInput && this.props.isOnInitially) {
@@ -627,6 +632,14 @@ export default class VideoRecorder extends Component {
       this.setState({
         isReplayVideoMuted: !this.state.isReplayVideoMuted
       })
+    }
+  }
+
+  handleDownload = () => {
+    if (this.props.getDownloadFilename) {
+      var videoBlob = this.state.videoBlob
+      var downloadFilename = this.props.getDownloadFilename()
+      saveAs(videoBlob, downloadFilename)
     }
   }
 
@@ -737,6 +750,7 @@ export default class VideoRecorder extends Component {
       countdownTime,
       timeLimit,
       showReplayControls,
+      showDownloadButton,
       replayVideoAutoplayAndLoopOff,
       renderActions,
       useVideoInput
@@ -759,6 +773,7 @@ export default class VideoRecorder extends Component {
           countdownTime,
           timeLimit,
           showReplayControls,
+          showDownloadButton,
           replayVideoAutoplayAndLoopOff,
           useVideoInput,
 
@@ -769,7 +784,8 @@ export default class VideoRecorder extends Component {
           onStopRecording: this.handleStopRecording,
           onPauseRecording: this.handlePauseRecording,
           onResumeRecording: this.handleResumeRecording,
-          onStopReplaying: this.handleStopReplaying
+          onStopReplaying: this.handleStopReplaying,
+          onDownload: this.handleDownload
         })}
       </Wrapper>
     )

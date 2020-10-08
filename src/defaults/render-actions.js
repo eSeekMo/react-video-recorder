@@ -32,6 +32,7 @@ const Actions = ({
   countdownTime,
   timeLimit,
   showReplayControls,
+  showDownloadButton,
   replayVideoAutoplayAndLoopOff,
   useVideoInput,
 
@@ -43,7 +44,8 @@ const Actions = ({
   onPauseRecording,
   onResumeRecording,
   onStopReplaying,
-  onConfirm
+  onConfirm,
+  onDownload
 }) => {
   const renderContent = () => {
     const shouldUseVideoInput =
@@ -60,13 +62,21 @@ const Actions = ({
 
     if (isReplayingVideo) {
       return (
-        <Button
-          type='button'
-          onClick={onStopReplaying}
-          data-qa='start-replaying'
-        >
-          Use another video
-        </Button>
+        <>
+          <Button
+            type='button'
+            onClick={onStopReplaying}
+            data-qa='start-replaying'
+          >
+            Use another video
+          </Button>
+
+          {showDownloadButton && (
+            <Button type='button' onClick={onDownload}>
+              Download video
+            </Button>
+          )}
+        </>
       )
     }
 
@@ -130,6 +140,7 @@ Actions.propTypes = {
   countdownTime: PropTypes.number,
   timeLimit: PropTypes.number,
   showReplayControls: PropTypes.bool,
+  showDownloadButton: PropTypes.bool,
   replayVideoAutoplayAndLoopOff: PropTypes.bool,
   isReplayingVideo: PropTypes.bool,
   useVideoInput: PropTypes.bool,
@@ -142,7 +153,8 @@ Actions.propTypes = {
   onPauseRecording: PropTypes.func,
   onResumeRecording: PropTypes.func,
   onStopReplaying: PropTypes.func,
-  onConfirm: PropTypes.func
+  onConfirm: PropTypes.func,
+  onDownload: PropTypes.func
 }
 
 export default Actions
