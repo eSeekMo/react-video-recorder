@@ -637,7 +637,7 @@ export default class VideoRecorder extends Component {
 
   handleDownload = () => {
     if (this.props.getDownloadFilename) {
-      var videoBlob = this.state.videoBlob
+      var videoBlob = this.state.fixedVideoBlob
       var downloadFilename = this.props.getDownloadFilename()
       saveAs(videoBlob, downloadFilename)
     }
